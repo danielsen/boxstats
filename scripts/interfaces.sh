@@ -32,7 +32,7 @@ do
   j=0
   for metric in ${metrics[@]}
   do
-    send_stat $metricPrefix.$interface.$metric ${rawArray[j]} $eventTime
+    send_stat $metricPrefix.$interface.$metric ${rawArray[j]} "g"
     j=`expr $j + 1`
   done
 done < /proc/net/dev 

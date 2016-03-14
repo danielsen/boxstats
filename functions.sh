@@ -17,9 +17,8 @@ disconnect() {
 send_stat() {
   metric=$1
   value=$2
-  stamp=$3
+  mtype=$3
 
-  printf "$namespace.$metric $value $stamp" >&3
-  #printf "$namespace.$metric $value $stamp\n"
+  printf "$namespace.$metric $value|$mtype" >&3
 }
 

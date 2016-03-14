@@ -17,7 +17,7 @@ rawArray=($vmstatData)
 j=0
 for metric in ${metrics[@]}
 do
-  send_stat $metricPrefix.$metric ${rawArray[j]} $eventTime
+  send_stat $metricPrefix.$metric ${rawArray[j]} "g"
   j=`expr $j + 1`
 done
 

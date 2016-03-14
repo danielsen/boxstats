@@ -10,7 +10,7 @@ metricPrefix="$fqdn"
 for process in ${processes[@]}
 do 
   cpupct=`./scripts/process-cpu $process 3`
-  send_stat $metricPrefix.$process.cpu $cpupct $eventTime
+  send_stat $metricPrefix.$process.cpu $cpupct "g"
 done
 
 exit 0

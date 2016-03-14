@@ -1,7 +1,6 @@
 ### Overview
 `boxstats.sh` is a simple, configurable set of tools for monitoring a hosts
-health an recording that information in Graphite or any time series database
-with a Graphite plugin.
+health an recording that information in any time series database via statsd.
 
 ### Installation and Use
 Installation is manually managed at this time. The simplest way is to clone the

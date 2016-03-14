@@ -13,8 +13,8 @@ one=`echo $rawLoad | cut -d' ' -f1`
 five=`echo $rawLoad | cut -d' ' -f2`
 fifteen=`echo $rawLoad | cut -d' ' -f3`
 
-send_stat $metricPrefix.short $one $eventTime
-send_stat $metricPrefix.medium $five $eventTime
-send_stat $metricPrefix.long $fifteen $eventTime
+send_stat $metricPrefix.short $one "g"
+send_stat $metricPrefix.medium $five "g"
+send_stat $metricPrefix.long $fifteen "g"
 
 exit 0

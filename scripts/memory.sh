@@ -37,7 +37,7 @@ do
   key=`echo $metric | cut -d':' -f1`
   value=`echo $metric | cut -d':' -f2`
   bytes=`expr $value \* 1024`
-  send_stat $metricPrefix.$key $bytes $eventTime
+  send_stat $metricPrefix.$key $bytes "g"
 done
 
 exit 0

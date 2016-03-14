@@ -19,6 +19,6 @@ send_stat() {
   value=$2
   mtype=$3
 
-  printf "$namespace.$metric $value|$mtype" >&3
+  printf "$namespace.$metric:$value|$mtype" >&3
 }
 

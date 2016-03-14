@@ -2,8 +2,8 @@
 # Description: Helper functions for statitics submissions
 source ./config.ini
 
-host="${CARBON_HOST:-$carbon_host}"
-port="${CARBON_PORT:-$carbon_port}"
+host="${CARBON_HOST:-$statsd_host}"
+port="${CARBON_PORT:-$statsd_port}"
 
 connect() {
   exec 3<> /dev/udp/$host/$port

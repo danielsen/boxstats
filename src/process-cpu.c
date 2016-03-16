@@ -10,8 +10,9 @@
  *              in /var/run and doesn't make any effort to find the pid file
  *              elsewhere.
  */
-#include <stdlib.h> 
+#include <ctype.h>
 #include <stdio.h>
+#include <stdlib.h> 
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -160,27 +161,71 @@ void calc_cpu_usage(const struct pstat* cur_usage,
 }
 
 
-int main (int argc, char *argv[]) {
+int main (int argc, char **argv) {
   
-  if (argc != 3) {
-    printf("Usage: %s <process name> <interval>", argv[0]);
+  if (argc != 5) {
+    printf("Usage: %s -p <process name / id> -i <interval>\n", argv[0]);
     return 1;
   }
 
-  char pidfile[75];
-  strcpy(pidfile, "/var/run/");
-  strcat(pidfile, argv[1]);
-  strcat(pidfile, ".pid");
+  char* proc = NULL;
 
-  int interval = atoi(argv[2]);
+  int c, pid, interval;
+  int got_proc_name = 0;
 
   double user, sys;
   struct pstat mark0, mark1;
 
-  int pid = read_pid(pidfile);
+  while ((c = getopt(argc, argv, "p:i:")) != -1) {
+    switch (c) {
+      case 'p':
 
-  if (pid == 0) 
-    return 1;
+        if (strspn(optarg, "0123456789") == strlen(optarg)) {
+          pid = atoi(optarg);
+          proc = NULL;
+        } else {
+          // not an integer, assume a process name
+          got_proc_name = 1;
+          proc = optarg;
+        }
+        break;
+      case 'i':
+
+        if (strspn(optarg, "0123456789") == strlen(optarg)) {
+          interval = atoi(optarg);
+        } else {
+          fprintf(stderr, "invalid -i option %s - expecting a number\n",
+            optarg ? optarg : "");
+          exit(EXIT_FAILURE);
+        }
+        break;
+      case '?':
+        if (optopt == 'p') {
+          fprintf(stderr, "Option -%c requires an argument.\n", optopt);
+        } else if (optopt == 'i') {
+          fprintf(stderr, "Option -%c requires an argument.\n", optopt);
+        } else if (isprint(optopt)) {
+          fprintf(stderr, "Unknown option `-%c'.\n", optopt);
+        } else {
+          fprintf(stderr, "Unknown option character `\\x%x'.\n", optopt);
+        }
+        return 1;
+      default:
+        exit(EXIT_FAILURE);
+    }
+  }
+
+  if (got_proc_name == 1) {
+    char pidfile[75];
+    strcpy(pidfile, "/var/run/");
+    strcat(pidfile, proc);
+    strcat(pidfile, ".pid");
+
+    pid = read_pid(pidfile);
+
+    if (pid == 0) 
+      return 1;
+  }
 
   get_usage(pid, &mark0);
   sleep(interval);

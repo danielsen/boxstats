@@ -14,11 +14,12 @@ do
   containers=$(docker ps -q --filter "image=$image")
   for container in ${containers[@]}
   do
-    cpid=`docker inspect $container | grep -oE "\"Pid\": [0-9]{0,6}"` 
+    cpid=`docker inspect $container | grep -oE "\"Pid\": [0-9]{0,6}" | \
+      cut -d' ' -f2` 
     ccpu=`./scripts/process-cpu -p $cpid -i $interval`
-    cpupct=`echo "$cpupct + $ccpu" | bc`
+    cpupct=`echo "($cpupct + $ccpu) * 10" | bc`
   done
-  send_stat $metricPrefix.$image.$cpupct "g"
+  send_stat $metricPrefix.$image $cpupct "g"
 done
 
 exit 0
